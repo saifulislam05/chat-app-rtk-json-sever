@@ -20,7 +20,7 @@ export default function Navigation() {
             </Link>
             <ul>
               <li className="text-white">
-                <a href="">
+                <a href="s">
                   <span onClick={logout}>Logout</span>
                 </a>
               </li>
