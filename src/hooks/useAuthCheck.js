@@ -18,7 +18,7 @@ const useAuthCheck = () => {
 
         }
         setAuthChecked(true)
-    }, [])
+    }, [dispatch])
     return authChecked;
 }
 
