@@ -14,8 +14,6 @@ export default function Messages({ messages = [] }) {
           .map((message) => {
             const { message: lastMessage, id, sender } = message || {};
             const justify = sender.email !== email ? "start" : "end";
-            console.log(lastMessage, sender.email);
-
             return <Message key={id} justify={justify} message={lastMessage} />;
           })}
       </ul>
