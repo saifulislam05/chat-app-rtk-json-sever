@@ -1,5 +1,6 @@
 import gravatarUrl from "gravatar-url";
 import moment from "moment";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useGetConversationsQuery } from "../../features/conversations/conversationsApi";
@@ -31,29 +32,37 @@ export default function ChatItems() {
   } else if (!isLoading && !isError && conversations?.length === 0) {
     content = <li className="m-2 text-center">No conversations found!</li>;
   } else if (!isLoading && !isError && conversations?.length > 0) {
-    content = conversations.map((conversation) => {
-      const { id, message, timestamp } = conversation;
-      const { email } = user || {};
-      const { name, email: partnerEmail } = getPartnerInfo(
-        conversation.users,
-        email
-      );
+    content = (
+      <InfiniteScroll dataLength={conversations?.length}
+        next={() => console.log("fetching")}
+        hasMore={true}
+        loader={<h4>Loading</h4>}
+      height={window.innerHeight-129}>
+        {conversations.map((conversation) => {
+          const { id, message, timestamp } = conversation;
+          const { email } = user || {};
+          const { name, email: partnerEmail } = getPartnerInfo(
+            conversation.users,
+            email
+          );
 
-      return (
-        <li key={id}>
-          <Link to={`/inbox/${id}`}>
-            <ChatItem
-              avatar={gravatarUrl(partnerEmail, {
-                size: 80,
-              })}
-              name={name}
-              lastMessage={message}
-              lastTime={moment(timestamp).fromNow()}
-            />
-          </Link>
-        </li>
-      );
-    });
+          return (
+            <li key={id}>
+              <Link to={`/inbox/${id}`}>
+                <ChatItem
+                  avatar={gravatarUrl(partnerEmail, {
+                    size: 80,
+                  })}
+                  name={name}
+                  lastMessage={message}
+                  lastTime={moment(timestamp).fromNow()}
+                />
+              </Link>
+            </li>
+          );
+        })}
+      </InfiniteScroll>
+    );
   }
 
   return <ul>{content}</ul>;
